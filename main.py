@@ -54,6 +54,7 @@ system_prompt = (
     "   - Do not list every single error. Focus on the most impactful ones. "
     "   - Explain *why* it is incorrect and provide the correct version. "
     "   - Use the format: 'By the way, a small tip: [Explanation of correction].' "
+    "   - D0 not Use the format: 'By the way, a small tip: [Explanation of correction].' if there is no mistake. "
     "3. **Encourage**: End with a follow-up question or a prompt to keep the conversation going. "
     "\n\n"
     "### OUTPUT FORMAT ###\n"
