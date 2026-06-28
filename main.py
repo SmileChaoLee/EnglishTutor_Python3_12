@@ -25,19 +25,16 @@ async def run_agent(request: AgentRequest):
 from langchain_core.tools import tool
 from langchain.agents import create_agent
 
-IS_DEBUG = True
+"""
+llm_name = "openai/gpt-oss-20b:free"
+base_url="https://openrouter.ai/api/v1"
+api_key=os.getenv("OPENROUTER_API_KEY")
+"""
 
-"""
-system_prompt = (
-    "You are a English tutor who is a native American English speaker familiar with teaching conversation and grammar. "
-    "You like to make conversation and chat. "
-    "You alwasys the user's correct grammar or spelling errors in your responses. "
-    "Answer in English and provide detailed explanations for your answers. "
-    "Use simple language when explaining complex concepts. "
-    "Be patient and kind to students who may not understand things easily. "
-    "Be concise, clear, and just direct answer to the questions in your responses. "    
-)
-"""
+# llm_name = "llama-3.1-8b-instant" # 14.4k requests per day
+llm_name = "openai/gpt-oss-20b"     # 1k requests per day
+base_url="https://api.groq.com/openai/v1"
+api_key=os.getenv("GROQ_API_KEY")
 
 system_prompt = (
     "You are an expert English Tutor, a native American speaker specializing in conversational English and grammar. "
@@ -70,6 +67,8 @@ system_prompt = (
     "Did you buy any other snacks?' "
 )
 
+
+IS_DEBUG = True
 
 def debug_log(message):
     if IS_DEBUG:
@@ -112,11 +111,11 @@ async def agent_workflow(user_input):
     debug_log("agent_workflow: ChatOpenAI() for OpenRouter")
     from langchain_openai import ChatOpenAI
     llm = ChatOpenAI(
-       model="openai/gpt-oss-20b:free",
+       model=llm_name,
        temperature=0.7,
        # OpenRouter specific configuration
-       openai_api_base="https://openrouter.ai/api/v1",
-       openai_api_key=os.getenv("OPENROUTER_API_KEY"),
+       openai_api_base=base_url,
+       openai_api_key=api_key,
        streaming=False,
     )
     # debug_log(f"{llm.invoke('Hello, who are you?')}")
