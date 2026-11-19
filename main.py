@@ -148,6 +148,15 @@ llm_name = "openai/gpt-oss-20b"     # 1k requests per day
 base_url="https://api.groq.com/openai/v1"
 api_key=os.getenv("GROQ_API_KEY")
 
+from langchain_openai import ChatOpenAI
+llmModel = ChatOpenAI(
+    model=llm_name,
+    temperature=0.7,
+    # OpenRouter specific configuration
+    openai_api_base=base_url,
+    openai_api_key=api_key,
+    streaming=False,
+)
 
 IS_DEBUG = True
 
@@ -189,24 +198,15 @@ async def agent_workflow(user_input, system_prompt):
     messages.append(("user", user_input))
 
     # 2. Initialize LangChain Components    
-    debug_log("agent_workflow: ChatOpenAI() for OpenRouter")
-    from langchain_openai import ChatOpenAI
-    llm = ChatOpenAI(
-       model=llm_name,
-       temperature=0.7,
-       # OpenRouter specific configuration
-       openai_api_base=base_url,
-       openai_api_key=api_key,
-       streaming=False,
-    )
-    # debug_log(f"{llm.invoke('Hello, who are you?')}")
+    # debug_log("agent_workflow: ChatOpenAI() for OpenRouter")
+    # debug_log(f"{llmModel.invoke('Hello, who are you?')}")
 
     full_agent_log = ""
         
     try:    
         # 4. Create the Agent        
         debug_log("agent_workflow: create_agent()")
-        agent = create_agent(model=llm, tools=python_tools, system_prompt=system_prompt)
+        agent = create_agent(model=llmModel, tools=python_tools, system_prompt=system_prompt)
     except Exception as e:
         error_msg = f"agent_workflow.create_agent().Exception error: {str(e)}"
         debug_log(f"agent_workflow.create_agent.Exception")
